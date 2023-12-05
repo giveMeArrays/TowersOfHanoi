@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Towers of Hanoi</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+<style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    canvas {
+      border: 1px solid #333;
+      width: 1000px;
+    }
+</style>
+</head>
+<body>
+<script>
+let numberOfDisks = 3;
+let stacks = [[], [], []];
+let moves = [];
+let frameRateValue = 33;
+ 
+function setup() {
+  createCanvas(800, 400);
+  resetGame();
+}
+ 
+function draw() {
+  background(255);
+ 
+  // Draw pegs
+  const pegWidth = 10;
+  const pegHeight = 100;
+  const baseHeight = 20;
+ 
+  for (let i = 0; i < 3; i++) {
+    const x = width / 4 * (i + 1);
+    const y = height - baseHeight / 2;
+    fill(100, 100, 100);
+    rect(x, y, pegWidth, pegHeight + baseHeight);
+  }
+ 
+  // Draw disks
+  for (let i = 0; i < 3; i++) {
+    const x = width / 4 * (i + 1);
+    const y = height - baseHeight / 2;
+    const stack = stacks[i];
+ 
+    for (let j = 0; j < stack.length; j++) {
+      const diskWidth = stack[j] * 20;
+      const diskHeight = 20;
+      fill(150, 0, 255);
+      rectMode(CENTER);
+      rect(x, y - j * diskHeight - diskHeight / 2, diskWidth, diskHeight);
+    }
+  }
+ 
+  // Auto play moves
+  if (frameCount % frameRateValue === 0 && moves.length > 0) {
+    const move = moves.shift();
+    moveDisk(move[0], move[1]);
+  }
+}
+ 
+function resetGame() {
+  stacks = [[], [], []];
+  moves = [];
+  for (let i = numberOfDisks; i > 0; i--) {
+    stacks[0].push(i);
+  }
+  hanoi(numberOfDisks, 0, 2, 1);
+}
+ 
+function hanoi(n, source, target, auxiliary) {
+  if (n > 0) {
+    hanoi(n - 1, source, auxiliary, target);
+    moves.push([source, target]);
+    hanoi(n - 1, auxiliary, target, source);
+  }
+}
+ 
+function moveDisk(source, target) {
+  if (stacks[source].length === 0) return;
+ 
+  const disk = stacks[source].pop();
+  stacks[target].push(disk);
+}
+</script>
+</body>
+</html>
