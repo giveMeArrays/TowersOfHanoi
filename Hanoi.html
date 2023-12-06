@@ -8,27 +8,33 @@
 <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      background-color: #7c7c7c;
     }
     canvas {
       border: 1px solid #333;
       width: 1000px;
     }
+    label{
+      color: white;
+    }
 </style>
 </head>
+<button onclick="resetGame()">Solve</button>
+<label>Number of Discs</label>
+<input type="number" min="4" max="10" value="4" id="disks">
 <body>
 <script>
-let numberOfDisks = 3;
 let stacks = [[], [], []];
 let moves = [];
 let frameRateValue = 33;
  
 function setup() {
   createCanvas(800, 400);
-  resetGame();
 }
  
 function draw() {
@@ -36,7 +42,7 @@ function draw() {
  
   // Draw pegs
   const pegWidth = 10;
-  const pegHeight = 100;
+  let pegHeight = parseInt(document.getElementById("disks").value)*40;
   const baseHeight = 20;
  
   for (let i = 0; i < 3; i++) {
@@ -69,6 +75,7 @@ function draw() {
 }
  
 function resetGame() {
+  let numberOfDisks = parseInt(document.getElementById("disks").value);
   stacks = [[], [], []];
   moves = [];
   for (let i = numberOfDisks; i > 0; i--) {
